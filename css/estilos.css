@@ -1,62 +1,62 @@
-@importar  "mi-nav.css" ;
-@importar  "mi-footer.css" ;
-@import  "listas.css" ;
+@import "mi-nav.css";
+@import "mi-footer.css";
+@import "listas.css";
 
-: root {
-  familia de fuentes : sans-serif;
-  --col-active :  # 4646462c ;
-  - encabezado de color : blanco;
-  --colorMiNav : blanco;
+:root {
+  font-family: sans-serif;
+  --col-active: #4646462c;
+  --color-header: white;
+  --colorMiNav: white;
 }
 
-cuerpo {
-  ancho máximo :  640 px ;
-  margen :  0 automático;
-  acolchado :  0.5 rem ;
+body {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0.5rem;
 }
 
-encabezado {
-  posición : -webkit-sticky;
-  posición : pegajosa;
-  arriba :  0 ;
-  color de fondo :
-    var ( --color-encabezado );
+header {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  background-color:
+    var(--color-header);
 }
 
-. herramientas {
-  pantalla : flex;
-  flujo flexible : envoltura;
-  alinear-elementos : centro;
-  alinear-contenido : flex-end;
-  justificar-contenido : flex-end;
-  margen superior :  0,5 rem ;
-  fondo acolchado :  0,5 rem ;
-  espacio :  0,5 rem ;
+.herramientas {
+  display: flex;
+  flex-flow: wrap;
+  align-items: center;
+  align-content: flex-end;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  gap: 0.5rem;
 }
 
- entrada de encabezado {
-  flex-grow :  1 ;
+header input {
+  flex-grow: 1;
 }
 
 h1 {
-  margen :  0,5 rem  0 ;
+  margin: 0.5rem 0;
 }
 
-figura  img {
-  ancho máximo :  100 % ;
+figure img {
+  max-width: 100%;
 }
 
-leyenda ,
-p  label {
-  pantalla : bloque;
-  font-weight : negrita;
-  tamaño de fuente :  0,7 rem ;
+legend,
+p label {
+  display: block;
+  font-weight: bold;
+  font-size: 0.7rem;
 }
 
-p  etiqueta > * {
-  pantalla : bloque;
-  font-weight : normal;
-  tamaño de fuente :  1 rem ;
-  de caja de tamaño : frontera-box;
-  ancho :  100 % ;
+p label>* {
+  display: block;
+  font-weight: normal;
+  font-size: 1rem;
+  box-sizing: border-box;
+  width: 100%;
 }
