@@ -1,117 +1,118 @@
-importar  {
-  getAuth ,
+import {
+  getAuth,
   getFirestore
-}  de  "../lib/fabrica.js" ;
-importar  {
-  getString ,
+} from "../lib/fabrica.js";
+import {
+  getString,
   muestraError
-}  de  "../lib/util.js" ;
-importar  {
+} from "../lib/util.js";
+import {
   muestraAlumnos
-}  de  "./navegacion.js" ;
-importar  {
+} from "./navegacion.js";
+import {
   tieneRol
-}  de  "./seguridad.js" ;
+} from "./seguridad.js";
 
-const  daoAlumno  =
-  getFirestore ( ) .
-    colección ( "Alumno" ) ;
-const  params  =
-  nueva  URL ( ubicación . href ) .
-    searchParams ;
-const  id  =  params . obtener ( "id" ) ;
-/ ** @type {HTMLFormElement} * /
-const  forma  =  documento [ "forma" ] ;
+const daoAlumno =
+  getFirestore().
+    collection("Alumno");
+const params =
+  new URL(location.href).
+    searchParams;
+const id = params.get("id");
+/** @type {HTMLFormElement} */
+const forma = document["forma"];
 
-getAuth ( ) . onAuthStateChanged (
-  protegido ,  muestraError ) ;
+getAuth().onAuthStateChanged(
+  protege, muestraError);
 
-/ ** @param { importar (
+/** @param {import(
     "../lib/tiposFire.js").User}
-    usuario * /
- función  asíncrona protege ( usuario )  {
-  if  ( tieneRol ( usuario ,
-    [ "Administrador" ] ) )  {
-    busca ( ) ;
+    usuario */
+async function protege(usuario) {
+  if (tieneRol(usuario,
+    ["Administrador"])) {
+    busca();
   }
 }
 
-/ ** Busca y muestra los datos que
-* correspondencia al id recibido. * /
- función  asíncrona busca ( )  {
-  prueba  {
-    const  doc  =
-      aguardar  daoAlumno .
-        doc ( id ) .
-        obtener ( ) ;
-    si  ( doc . existe )  {
-      / **
+/** Busca y muestra los datos que
+ * corresponden al id recibido. */
+async function busca() {
+  try {
+    const doc =
+      await daoAlumno.
+        doc(id).
+        get();
+    if (doc.exists) {
+      /**
        * @type {
-          importar ("./ tipos.js").
-                  Alumno} * /
-       datos  constantes =  doc . datos ( ) ;
-      forma . matrícula . valor  =  datos . matrícula ;
-      forma . nombre . valor  =  datos . nombre  ||  "" ;
-      forma . telefono . valor  =  datos . telefono  ||  "" ;
-      forma . grupo . valor  =  datos . grupo  ||  "" ;
-      forma . fecha . valor  =  datos . fecha  ||  "" ;
-      forma . addEventListener (
-        "enviar" ,  guarda ) ;
-      forma . eliminar .
-        addEventListener (
-          "clic" ,  elimina ) ;
-    }  más  {
-      lanzar  nuevo  error (
-        "No se encontró". ) ;
+          import("./tipos.js").
+                  Alumno} */
+      const data = doc.data();
+      forma.matricula.value = data.matricula;
+      forma.nombre.value = data.nombre || "";
+      forma.telefono.value = data.telefono || "";
+      forma.grupo.value = data.grupo || "";
+      forma.fecha.value = data.fecha || "";
+      forma.addEventListener(
+        "submit", guarda);
+      forma.eliminar.
+        addEventListener(
+          "click", elimina);
+    } else {
+      throw new Error(
+        "No se encontró.");
     }
-  }  captura  ( e )  {
-    muestraError ( e ) ;
-    muestraAlumnos ( ) ;
+  } catch (e) {
+    muestraError(e);
+    muestraAlumnos();
   }
 }
 
-/ ** @param { Evento } evt * /
- función  asíncrona guarda ( evt )  {
-  prueba  {
-    evt . preventDefault ( ) ;
-    const  formData  =
-      new  FormData ( forma ) ;
-    const  matricula  =  getString (
-        formData ,  "matricula" ) . recortar ( ) ;  
-    const  nombre  =  getString ( formData ,  "nombre" ) . recortar ( ) ;
-    const  telefono  =  getString ( formData ,  "telefono" ) . recortar ( ) ;
-    const  grupo  =  getString ( formData ,  "grupo" ) . recortar ( ) ;
-    const  fecha  =  getString ( formData ,  "fecha" ) . recortar ( ) ;
-    / **
+/** @param {Event} evt */
+async function guarda(evt) {
+  try {
+    evt.preventDefault();
+    const formData =
+      new FormData(forma);
+    const matricula = getString(
+        formData, "matricula").trim();  
+    const nombre = getString(formData, "nombre").trim();
+    const telefono = getString(formData, "telefono").trim();
+    const grupo = getString(formData, "grupo").trim();
+    const fecha = getString(formData, "fecha").trim();
+    /**
      * @type {
-        importar ("./ tipos.js").
-                Alumno} * /
-    const  modelo  =  {
-      matrícula , 
-      nombre ,
-      telefono ,
-      grupo ,
+        import("./tipos.js").
+                Alumno} */
+    const modelo = {
+      matricula, 
+      nombre,
+      telefono,
+      grupo,
       fecha
-    } ;
-    aguardar  daoAlumno .
-      doc ( id ) .
-      set ( modelo ) ;
-    muestraAlumnos ( ) ;
-  }  captura  ( e )  {
-    muestraError ( e ) ;
+    };
+    await daoAlumno.
+      doc(id).
+      set(modelo);
+    muestraAlumnos();
+  } catch (e) {
+    muestraError(e);
   }
 }
 
- función  asíncrona elimina ( )  {
-  prueba  {
-    si  ( confirmar ( "Confirmar la"  +
-      "eliminación" ) )  {
-      aguardar  daoAlumno .
-        doc ( id ) .
-        eliminar ( ) ;
-      muestraAlumnos ( ) ;
+async function elimina() {
+  try {
+    if (confirm("Confirmar la " +
+      "eliminación")) {
+      await daoAlumno.
+        doc(id).
+        delete();
+      muestraAlumnos();
     }
-  }  captura  ( e )  {
-    muestraError ( e ) ;
+  } catch (e) {
+    muestraError(e);
   }
 }
+
